@@ -7,54 +7,131 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: '#FFFFFF',
-    padding: 30,
+    padding: 40,
+    fontSize: 12,
   },
   header: {
-    marginBottom: 20,
-    borderBottom: 1,
-    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 40,
+  },
+  headerLeft: {
+    flexDirection: 'column',
+    width: '50%',
+  },
+  headerRight: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    width: '50%',
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    color: '#2563eb', // Blue color
+  },
+  companyDetails: {
+    marginBottom: 20,
+  },
+  companyName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  invoiceDetails: {
+    marginBottom: 4,
+  },
+  invoiceNumber: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
   section: {
-    margin: 10,
-    padding: 10,
+    marginBottom: 30,
   },
-  row: {
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#4b5563', // Gray color
+    textTransform: 'uppercase',
+  },
+  table: {
+    flexDirection: 'column',
+    marginTop: 20,
+  },
+  tableHeader: {
     flexDirection: 'row',
+    backgroundColor: '#f3f4f6',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#000000',
-    borderBottomStyle: 'solid',
-    alignItems: 'center',
-    height: 24,
-    fontStyle: 'bold',
+    borderBottomColor: '#e5e7eb',
+    fontWeight: 'bold',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
   },
   description: {
-    width: '60%',
+    width: '40%',
+  },
+  quantity: {
+    width: '15%',
+    textAlign: 'center',
+  },
+  price: {
+    width: '15%',
+    textAlign: 'right',
+  },
+  tax: {
+    width: '15%',
+    textAlign: 'right',
   },
   amount: {
     width: '15%',
     textAlign: 'right',
   },
-  total: {
-    marginTop: 20,
-    fontSize: 14,
+  summarySection: {
+    marginTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  summaryTable: {
+    width: '40%',
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+  },
+  summaryTotal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderTopWidth: 2,
+    borderTopColor: '#e5e7eb',
     fontWeight: 'bold',
   },
   footer: {
     position: 'absolute',
-    bottom: 30,
-    left: 30,
-    right: 30,
-    fontSize: 10,
-    color: '#666',
+    bottom: 40,
+    left: 40,
+    right: 40,
+    textAlign: 'center',
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    color: '#6b7280',
   },
-  companyDetails: {
-    marginBottom: 20,
-    fontSize: 12,
+  termsSection: {
+    marginTop: 40,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
   },
 });
 
@@ -71,31 +148,43 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, user }) => {
     return format(new Date(date), 'PPP');
   };
 
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
   return (
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
-        <Text style={styles.title}>INVOICE</Text>
-        {user.companyName && (
-          <View style={styles.companyDetails}>
-            <Text style={{ fontWeight: 'bold' }}>{user.companyName}</Text>
-            {user.address && <Text>{user.address}</Text>}
-            {(user.city || user.state || user.zipCode) && (
-              <Text>
-                {[user.city, user.state, user.zipCode].filter(Boolean).join(', ')}
-              </Text>
-            )}
-            {user.country && <Text>{user.country}</Text>}
-            {user.phone && <Text>Phone: {user.phone}</Text>}
-          </View>
-        )}
-        <Text>Invoice Number: {invoice.invoiceNumber}</Text>
-        <Text>Date: {formatDate(invoice.invoiceDate)}</Text>
-        <Text>Due Date: {formatDate(invoice.dueDate)}</Text>
+        <View style={styles.headerLeft}>
+          <Text style={styles.title}>INVOICE</Text>
+          {user.companyName && (
+            <View style={styles.companyDetails}>
+              <Text style={styles.companyName}>{user.companyName}</Text>
+              {user.address && <Text>{user.address}</Text>}
+              {(user.city || user.state || user.zipCode) && (
+                <Text>
+                  {[user.city, user.state, user.zipCode].filter(Boolean).join(', ')}
+                </Text>
+              )}
+              {user.country && <Text>{user.country}</Text>}
+              {user.phone && <Text>Phone: {user.phone}</Text>}
+            </View>
+          )}
+        </View>
+        <View style={styles.headerRight}>
+          <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
+          <Text style={styles.invoiceDetails}>Issue Date: {formatDate(invoice.invoiceDate)}</Text>
+          <Text style={styles.invoiceDetails}>Due Date: {formatDate(invoice.dueDate)}</Text>
+          <Text style={styles.invoiceDetails}>Status: {invoice.status}</Text>
+        </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}>Bill To:</Text>
-        <Text>{invoice.client.name}</Text>
+        <Text style={styles.sectionTitle}>Bill To</Text>
+        <Text style={{ fontWeight: 'bold' }}>{invoice.client.name}</Text>
         {invoice.client.address && <Text>{invoice.client.address}</Text>}
         {invoice.client.city && invoice.client.state && (
           <Text>{invoice.client.city}, {invoice.client.state} {invoice.client.zip}</Text>
@@ -103,45 +192,56 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, user }) => {
         {invoice.client.email && <Text>{invoice.client.email}</Text>}
       </View>
 
-      <View style={styles.section}>
-        <View style={styles.row}>
+      <View style={styles.table}>
+        <View style={styles.tableHeader}>
           <Text style={styles.description}>Description</Text>
-          <Text style={styles.amount}>Qty</Text>
-          <Text style={styles.amount}>Price</Text>
-          <Text style={styles.amount}>Tax</Text>
+          <Text style={styles.quantity}>Quantity</Text>
+          <Text style={styles.price}>Price</Text>
+          <Text style={styles.tax}>Tax</Text>
           <Text style={styles.amount}>Total</Text>
         </View>
 
         {invoice.items.map((item, index) => (
-          <View key={index} style={styles.row}>
+          <View key={index} style={styles.tableRow}>
             <Text style={styles.description}>{item.description}</Text>
-            <Text style={styles.amount}>{item.quantity}</Text>
-            <Text style={styles.amount}>${item.unitPrice.toFixed(2)}</Text>
-            <Text style={styles.amount}>{item.tax}%</Text>
+            <Text style={styles.quantity}>{item.quantity}</Text>
+            <Text style={styles.price}>{formatCurrency(item.unitPrice)}</Text>
+            <Text style={styles.tax}>{item.tax}%</Text>
             <Text style={styles.amount}>
-              ${(item.quantity * item.unitPrice * (1 + item.tax / 100)).toFixed(2)}
+              {formatCurrency(item.quantity * item.unitPrice * (1 + item.tax / 100))}
             </Text>
           </View>
         ))}
       </View>
 
-      <View style={[styles.section, { alignItems: 'flex-end' }]}>
-        <Text>Subtotal: ${invoice.subtotal.toFixed(2)}</Text>
-        <Text>Tax Amount: ${invoice.taxAmount.toFixed(2)}</Text>
-        <Text style={styles.total}>Total: ${invoice.total.toFixed(2)}</Text>
+      <View style={styles.summarySection}>
+        <View style={styles.summaryTable}>
+          <View style={styles.summaryRow}>
+            <Text>Subtotal:</Text>
+            <Text>{formatCurrency(invoice.subtotal)}</Text>
+          </View>
+          <View style={styles.summaryRow}>
+            <Text>Tax Amount:</Text>
+            <Text>{formatCurrency(invoice.taxAmount)}</Text>
+          </View>
+          <View style={styles.summaryTotal}>
+            <Text>Total:</Text>
+            <Text>{formatCurrency(invoice.total)}</Text>
+          </View>
+        </View>
       </View>
 
       {(invoice.paymentTerms || invoice.notes) && (
-        <View style={styles.section}>
+        <View style={styles.termsSection}>
           {invoice.paymentTerms && (
             <View style={{ marginBottom: 10 }}>
-              <Text style={{ fontWeight: 'bold' }}>Payment Terms:</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>Payment Terms</Text>
               <Text>{invoice.paymentTerms}</Text>
             </View>
           )}
           {invoice.notes && (
             <View>
-              <Text style={{ fontWeight: 'bold' }}>Notes:</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>Notes</Text>
               <Text>{invoice.notes}</Text>
             </View>
           )}

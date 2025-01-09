@@ -24,7 +24,12 @@ const DashboardPage = async () => {
   ] = await Promise.all([
     // All invoices
     prismadb.invoice.findMany({
-      where: { userId },
+      where: { 
+        userId ,
+        invoiceDate: {
+            gte: new Date(new Date().getFullYear(), 1, 1),
+          },
+        },
       include: {
         client: true,
       },
@@ -36,7 +41,7 @@ const DashboardPage = async () => {
     prismadb.invoice.findMany({
       where: {
         userId,
-        createdAt: {
+        invoiceDate: {
           gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
         },
       },
@@ -56,7 +61,14 @@ const DashboardPage = async () => {
     prismadb.client.findMany({
       where: { userId },
       include: {
-        invoices: true,
+        invoices: {
+          where: {
+            invoiceDate: {
+              gte: new Date(new Date().getFullYear(), 0, 1),
+              lt: new Date(new Date().getFullYear() + 1, 0, 1),
+            }
+          }
+        },
       },
     }),
   ]);
