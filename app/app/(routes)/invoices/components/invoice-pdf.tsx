@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page, Text, View, StyleSheet, Document } from '@react-pdf/renderer';
+import { Page, Text, View, StyleSheet, Document, Image } from '@react-pdf/renderer';
 import { Invoice, InvoiceItem, Client, User } from '@prisma/client';
 import { format } from 'date-fns';
 
@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: 'column',
     width: '50%',
+  },
+  logo: {
+    width: 120,
+    height: 'auto',
+    marginBottom: 20,
+    objectFit: 'contain',
   },
   headerRight: {
     flexDirection: 'column',
@@ -159,6 +165,12 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, user }) => {
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
+          {user.logo && (
+            <Image
+              src={user.logo}
+              style={styles.logo}
+            />
+          )}
           <Text style={styles.title}>INVOICE</Text>
           {user.companyName && (
             <View style={styles.companyDetails}>

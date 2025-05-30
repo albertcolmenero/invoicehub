@@ -28,6 +28,7 @@ model User {
   zipCode     String?
   country     String?
   phone       String?
+  logo        String?
   
   subscription Subscription? 
   projects    Project[] 

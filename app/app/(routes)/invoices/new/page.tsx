@@ -2,8 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import prismadb from "@/lib/prismadb";
-
-import { InvoiceForm } from "../[invoiceId]/components/invoice-form";
+import { NewInvoiceForm } from "./components/new-invoice-form";
 
 const NewInvoicePage = async () => {
   const { userId } = await auth();
@@ -21,15 +20,8 @@ const NewInvoicePage = async () => {
     }
   });
 
-  return ( 
-    <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <InvoiceForm 
-          initialData={null}
-          clients={clients}
-        />
-      </div>
-    </div>
+  return (
+    <NewInvoiceForm clients={clients} />
   );
 }
 

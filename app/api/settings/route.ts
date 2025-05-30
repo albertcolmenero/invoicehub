@@ -18,13 +18,23 @@ export async function PATCH(
       zipCode,
       country,
       phone,
+      logo,
     } = body;
-
-    
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    console.log(body);
+
+    // Get the user from database using clerkId
+    const useraux = await prismadb.user.findUnique({
+        where: {
+          clerkId: userId
+        }
+      });
+
+    console.log(useraux);
 
     const user = await prismadb.user.update({
       where: {
@@ -38,6 +48,7 @@ export async function PATCH(
         zipCode,
         country,
         phone,
+        logo,
       },
     });
   

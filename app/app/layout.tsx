@@ -1,10 +1,17 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
+import { cookies } from "next/headers"
+
 import Navbar from '@/components/navbar'
 import { UserButton } from "@clerk/nextjs";
 import { MobileMainNav } from "@/components/mobile-main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 import prismadb from "@/lib/prismadb";
+import { DashboardClient } from './components/dashboard-client';
+import { Separator } from '@/components/ui/separator';
+import { DynamicHeader } from '@/components/dynamic-header';
 
 export default async function DashboardLayout({
   children,
@@ -36,23 +43,31 @@ export default async function DashboardLayout({
       }
     });
   }
+
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+
   
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Navbar />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-end gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <div className="flex items-center gap-4">
-            <MobileMainNav />
-            <ThemeToggle />
-            <UserButton />
-          </div>
-        </header>
+      <SidebarProvider defaultOpen={defaultOpen}>
+          <AppSidebar />
 
-        <div className="flex flex-col sm:gap-4 sm:py-4">      
-          {children}
-        </div>
-      </div>
+            <SidebarInset>
+              <header className="flex h-16 shrink-0 items-center gap-2  px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
+                <DynamicHeader />
+              </header>
+              <div className="flex-col">
+              <div className="flex-1 space-y-4 px-1">
+              {children}
+              </div>
+            </div>
+            </SidebarInset>
+          
+          
+        </SidebarProvider>
     </div>
   )
 } 
