@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -41,7 +41,7 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-pdf/renderer": "^4.1.6",
-    "@runonatlas/private-next": "^0.2.0",
+    "@runonatlas/private-next": "^1.0.0",
     "@tanstack/react-table": "^8.20.6",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",

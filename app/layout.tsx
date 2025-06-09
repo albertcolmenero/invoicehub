@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { ClerkProvider } from '@clerk/nextjs';
+import { AtlasClientProvider } from "@/components/atlas-provider";
 
 export const metadata: Metadata = {
   title: "InvoiceHub",
@@ -16,7 +17,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider><html lang="en" suppressHydrationWarning>
+    <ClerkProvider>
+      <AtlasClientProvider>
+      <html lang="en" suppressHydrationWarning>
+      
       <body className="antialiased">
         
           <ThemeProvider
@@ -31,6 +35,7 @@ export default function RootLayout({
         
       </body>
     </html>
+    </AtlasClientProvider>
     </ClerkProvider>
   )
 }

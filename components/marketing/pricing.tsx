@@ -1,5 +1,9 @@
+"use client";
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { PricingComponent } from '@runonatlas/private-next/client';
+import { useRouter } from 'next/navigation';
 
 const plans = [
   {
@@ -20,7 +24,10 @@ const plans = [
 ]
 
 export default function Pricing() {
+  const router = useRouter();
+  
   return (
+    <>
     <section id="pricing" className="py-20 px-4 md:px-6 lg:px-8">
       <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -64,6 +71,13 @@ export default function Pricing() {
         </div>
       </div>
     </section>
+
+    <PricingComponent
+    
+    // Where to redirect after successful checkout.
+    successUrl={"http://localhost:3000/app/customer-portal"}
+    />
+    </>
   )
 }
 

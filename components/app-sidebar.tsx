@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3, ChevronUp, FileText, Home, Settings, User, Users } from "lucide-react"
+import { BarChart3, ChevronUp, FileText, Home, Settings, User, Users, CreditCard, UserCog } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useUser, SignOutButton } from "@clerk/nextjs"
 import {
@@ -39,6 +39,16 @@ const items = [
     title: "Customers",
     url: "/app/clients",
     icon: Users,
+  },
+  {
+    title: "Pricing",
+    url: "/app/pricing",
+    icon: CreditCard,
+  },
+  {
+    title: "Customer Portal",
+    url: "/app/customer-portal",
+    icon: UserCog,
   },
   {
     title: "Settings",

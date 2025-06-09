@@ -28,6 +28,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ProtectedExportButton, ProtectedAnalytics } from "@/components/feature-protection-examples"
 
 import prismadb from "@/lib/prismadb";
 import { format } from "date-fns";
@@ -156,6 +157,9 @@ const InvoicesPage = async () => {
           </Card>
         </div>
 
+        {/* Protected Analytics Section */}
+        <ProtectedAnalytics />
+
         {/* Actions and Filters */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex gap-2">
@@ -163,10 +167,7 @@ const InvoicesPage = async () => {
               <Plus className="h-4 w-4" />
               New Invoice
             </Button>
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
+            <ProtectedExportButton />
           </div>
 
           <div className="flex gap-2">
